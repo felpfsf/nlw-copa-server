@@ -17,6 +17,14 @@ async function bootstrap() {
   })
 
   fastify.get('/pools/count', async () => {
+    // Exemplo de contagem
+    const poolsCount = await prisma.pool.count()
+
+    return { poolsCount }
+  })
+
+  // Criei essa rota de teste
+  fastify.get('/pools/search', async () => {
     // Exemplo
     const poolsStartWith = await prisma.pool.findMany({
       where: {
@@ -25,10 +33,7 @@ async function bootstrap() {
         }
       }
     })
-    // Exemplo de contagem
-    const poolsCount = await prisma.pool.count()
-
-    return { poolsStartWith, poolsCount }
+    return { poolsStartWith }
   })
 
   await fastify.listen({ port: 3333, host: '0.0.0.0' })
