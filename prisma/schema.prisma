@@ -1,0 +1,24 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator erd {
+  provider = "prisma-erd-generator"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Tabela para criar os bolões
+// Cada tabela é chamada de model
+model Pool {
+  id        String   @id @default(cuid()) //o valor do ID será gerado automaticamente, @id define com primary key
+  title     String
+  code      String   @unique // cada codigo é único para cada bolão
+  createdAt DateTime @default(now())
+}
