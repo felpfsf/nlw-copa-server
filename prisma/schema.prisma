@@ -21,4 +21,65 @@ model Pool {
   title     String
   code      String   @unique // cada codigo é único para cada bolão
   createdAt DateTime @default(now())
+  ownerId   String?
+
+  // Relacionamentos
+  participants Participant[]
+  owner        User?         @relation(fields: [ownerId], references: [id])
+}
+
+// Tabela Pivô
+model Participant {
+  id     String @id @default(cuid())
+  userId String
+  poolId String
+
+  // Relacionamentos
+  guesses Guess[]
+  user    User    @relation(fields: [userId], references: [id])
+  pool    Pool    @relation(fields: [poolId], references: [id])
+
+  // Nessa tabela os registros de usuários e pool serão únicos
+  @@unique([userId, poolId])
+}
+
+// Tabela de usuário
+model User {
+  id String @id @default(cuid())
+
+  name      String
+  email     String   @unique
+  // Campo opcional usando o "?"
+  avatarUrl String?
+  createdAt DateTime @default(now())
+
+  participatingAt Participant[]
+  ownPools        Pool[]
+}
+
+// Tabela de jogos
+model Game {
+  id   String   @id @default(cuid())
+  date DateTime
+
+  firstTeamCountryCode  String
+  secondTeamCountryCode String
+
+  // Relacionado com a tabela guesses - nesse caso aqui não é uma coluna no BD
+  guesses Guess[]
+}
+
+// Tabela de palpites
+model Guess {
+  id String @id @default(cuid())
+
+  firstTeamPoints  Int
+  secondTeamPoints Int
+  createdAt        DateTime @default(now())
+  gameId           String
+  participantId    String
+
+  // Relacionamentos
+  game        Game        @relation(fields: [gameId], references: [id])
+  participant Participant @relation(fields: [participantId], references: [id])
 }
