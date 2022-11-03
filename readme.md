@@ -1,4 +1,8 @@
-# Instalando
+# Instruções Gerais
+
+Projeto desenvolvido durante a NLW Copa
+
+## Instalando / Iniciando o Projeto
 
 - [ ] ``npm init -y`` => **inicia as configurações padrão**
 - [ ] ``npm i typescript -D`` => **instala o typescript**
@@ -18,7 +22,28 @@
 ```js
 Rota de Pools(bolão):
   http://localhost:3333/pools/count
+  http://localhost:3333/pools/
 
-fastify.get('url')
+fastify.get('url', async () => {})
+
+fastify.post('url', async () => {})
 
 ```
+
+## Populando o banco de dados com seed
+
+Em ``package.json`` adicionar o comando ``"prisma":{"seed":"tsx <caminho do arquivo seed>"}``
+
+- [ ] ``npx prisma db seed`` => **comando que inicia o arquivo contendo os dados para popular o BD**
+
+## Criando método post
+
+``fastify.post()`` passando o ``request`` e ``reply``. A requisição será o titulo do bolão e no retorno a resposta com o ``status`` ``201``, status de sucesso mais descritivo, enviando o json na confirmação
+
+## Validando os dados
+
+- [ ] ``npm i zod`` => ZOD é uma lib de validação de dados
+
+## UUID
+
+- [ ] ``npm i short-unique-id`` => instala uma lib de geração de IDs únicos com uma probabilidade baixa de colisão
