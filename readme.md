@@ -92,3 +92,9 @@ Para listar os bolões é utilizado o método `findMany()` em `pool`, onde dentr
 ## Detalhes do bolão
 
 Para listar apenas um único bolão basta seguir o método anterior porém utilizando `findUnique()` e usar o `id` como parâmetro de busca. Seguindo o design o resto permanece o mesmo.
+
+## Listando os games
+
+Para listar os games é utilizado o método `findMany()`, ordenando de forma decresente pela data e nos palpites onde o participante tenha o mesmo `id` do usuário logado e o `id` do bolão o mesmo que está na requisição.
+
+Ao retornar a informação de forma correta é utlizado o método map() em games retornando todas as informações previstas e em guess apenas o primeiro valor existente, este será único no game, e o array guesses é passado como undefined para não ser exibido
