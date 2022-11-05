@@ -121,7 +121,9 @@ export async function PoolRoutes(fastify: FastifyInstance) {
         }
       })
 
-      return reply.status(201).send()
+      return reply.status(201).send({
+        message: 'Bolão criado com sucesso'
+      })
     }
   )
 
