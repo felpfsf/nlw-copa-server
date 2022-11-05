@@ -1,4 +1,5 @@
 import Fastify from 'fastify'
+import jwt from '@fastify/jwt'
 import cors from '@fastify/cors'
 
 import { PoolRoutes } from './routes/pool'
@@ -16,6 +17,11 @@ async function bootstrap() {
   // CORS
   await fastify.register(cors, {
     origin: true
+  })
+
+  // JWT
+  await fastify.register(jwt, {
+    secret: process.env.SECRET_API as string
   })
 
   // ROTAS
