@@ -1,4 +1,4 @@
-# Instruções Gerais
+# Anotações Gerais
 
 Projeto desenvolvido durante a NLW Copa
 
@@ -72,3 +72,23 @@ As informação são recebidas em um formato `json` e armazenadas em uma *const*
 ## Cadastrando usuário no banco
 
 Depois de efetuada a autenticação é buscado pelo googleId do usuário no banco, caso não tenha nenhum valor igual então se trata de um usuário novo e é gravado suas informações no banco através do método `create()` do *prisma*. Nele é passado um objeto data com o `id, email, nome e avatar`
+
+## Criando Bolões
+
+Como na versão web do aplicativo não necessita que o usuário esteja logado para criar um bolão então é criado um block `try/catch` para verificar essa possibilidade. No try é utilizado o `jwtVerify()` para verificar o token de acesso, caso positivo então é criado o bolão com os dados `titulo`, `code`, o `ownerId` que vem do `sub` e a relação `participants` com o `userId` que também vem do `sub`
+
+## Entrando nos Bolões
+
+Para que o usuário possa entrar no bolão é verificado através do plugin criado `authenticate` e validando com a zod o código. Depois é verificado se o mesmo usuário faz parte do bolão através do método `findUnique()` onde possui o `code` e também se no relacionamento participants o `userId` for o mesmo que o `sub` do usuário logado.
+
+Esse resultado é passado para uma const que é usuada no condicional `if`, o primeiro verifica se há algum bolão existente com o código digitado e o segundo verifica se o usuário faz parte daquele bolão testando o comprimento de participants(se há algum valor).
+
+A versão web não possui login apenas a opção de criar o bolão então o primeiro usuário que entrar no bolão será o dono daquele bolão. Para fazer isso verifica se o bolão possui um ownerId e em caso positivo utiliza o método `update()` para colocar o ownerId no bolão com a Id que o usuário utilizou para entrar
+
+## Listando os bolões do usuário
+
+Para listar os bolões é utilizado o método `findMany()` em `pool`, onde dentro do relacionamento `participants` busque através do userId(que vem de sub), também inclui a quantidade total de `participants` de cada bolão com o `_count`, seleciona 4 `avatarUrl()` dos `participants`, além disso o nome e o id do `owner` do bolão
+
+## Detalhes do bolão
+
+Para listar apenas um único bolão basta seguir o método anterior porém utilizando `findUnique()` e usar o `id` como parâmetro de busca. Seguindo o design o resto permanece o mesmo.
