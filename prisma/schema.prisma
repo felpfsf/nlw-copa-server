@@ -45,11 +45,10 @@ model Participant {
 
 // Tabela de usuário
 model User {
-  id String @id @default(cuid())
-
+  id        String   @id @default(cuid())
   name      String
   email     String   @unique
-  // Campo opcional usando o "?"
+  googleId  String?  @unique
   avatarUrl String?
   createdAt DateTime @default(now())
 
