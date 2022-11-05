@@ -98,3 +98,7 @@ Para listar apenas um único bolão basta seguir o método anterior porém utili
 Para listar os games é utilizado o método `findMany()`, ordenando de forma decresente pela data e nos palpites onde o participante tenha o mesmo `id` do usuário logado e o `id` do bolão o mesmo que está na requisição.
 
 Ao retornar a informação de forma correta é utlizado o método map() em games retornando todas as informações previstas e em guess apenas o primeiro valor existente, este será único no game, e o array guesses é passado como undefined para não ser exibido
+
+## Criando um palpite
+
+Ao criar o palpite, é utilizado os parâmetros o `poolId`, `gameId` validados pelo zod. É feita uma consulta na tabela participant para checar se o usuário faz parte do bolão, caso não faça parte uma mensagem de erro é enviada. Outra consulta é feita em guess para verificar se o usuário já enviou algum palpite anteriomente. O gameId é consultado para checar se o game existe. Uma última checagem é feita comparando a data do game com a data do usuário, assim evita de enviar palpites para jogos que já iniciaram ou expiraram.
