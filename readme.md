@@ -47,3 +47,7 @@ Em ``package.json`` adicionar o comando ``"prisma":{"seed":"tsx <caminho do arqu
 ## UUID
 
 - [ ] ``npm i short-unique-id`` => instala uma lib de geração de IDs únicos com uma probabilidade baixa de colisão
+
+## Criando Rotas
+
+Para organizar melhor criar uma pasta `routes` e criar um arquivo separado para cada entidade.
