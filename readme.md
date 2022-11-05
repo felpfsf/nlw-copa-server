@@ -50,4 +50,25 @@ Em ``package.json`` adicionar o comando ``"prisma":{"seed":"tsx <caminho do arqu
 
 ## Criando Rotas
 
-Para organizar melhor criar uma pasta `routes` e criar um arquivo separado para cada entidade.
+Para organizar melhor criar uma pasta `routes` e criar um arquivo separado para cada entidade. Cada arquivo terá uma função principal `async` com o `fastify` como argumento, seu tipo será de `FastifyInstance` e dentro dela a função `get` e `post` previamente criada em `server.ts`. Para usar essa função em server.ts é necessário importar ela através do método `register()` do *fastify* passando o nome da função/rota como parâmetro, ficando assim await `fastify.register(poolRoutes)`
+
+## Autenticação de usuário
+
+Em `auth.ts` criar um método post do fastify com uma rota e um request para receber o `access_token`, a chave de autenticação do Google. Para validar as informações é utilizado a lib `zod`.
+
+Para receber a autorização do Google é utilizado o método `fetch` passando a URL da api do Google, `'https://www.googleapis.com/oauth2/v2/userinfo'` e com o método `GET` e no `header` o token de acesso(`access_token`).
+
+As informação são recebidas em um formato `json` e armazenadas em uma *const* `userData`, para validar essas info utilizando a `zod` é criado um `schema` com as informações vinda da requisição, como *id, email, nome e avatar*. Então as informações vindas da resposta são parseadas nesse *schema*, validando essas informações e depois passada para outra *const* chamada `userInfo`.
+
+### JWT - JSON Web Token
+
+- [ ] `npm i @fastify/jwt` => pacote do fastify para poder usar JWT
+- [ ] `fastify.register` => secret precisa ser alguma chave e qdo for subir na produção é necessário armazenar ela em uma variável de ambiente.
+- [ ] process.env.SECRET_API => forma como importar a variável de ambiente, com typescript utilizar o `as string`
+- [ ] `token` => Em `auth.ts` uma const *token* que vai receber um *hash* com as informações do usuário...***ATENÇÃO: NÃO SE DEVE PASSAR NENHUMA INFO SENSÍVEL***...através do método `sign()` do `fastify/jwt`. As informações que vão para esse token são o nome, o avatarUrl, o sub(userId) e a data que o token irá expirar.
+- [ ] `jwtVerify()` => método que irá verificar se o token é válido, dessa forma garante que é o usuário correto que está acessando a rota. Esse método pode ser exportado como um plugin/middleware e assim será reutilizado mais vezes na aplicação.
+  Na rota /me é importado esse plugin/middleware recém criado através de onRequest e nele é passado o plugin como um array
+
+## Cadastrando usuário no banco
+
+Depois de efetuada a autenticação é buscado pelo googleId do usuário no banco, caso não tenha nenhum valor igual então se trata de um usuário novo e é gravado suas informações no banco através do método `create()` do *prisma*. Nele é passado um objeto data com o `id, email, nome e avatar`
